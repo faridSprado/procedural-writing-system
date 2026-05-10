@@ -1,5 +1,5 @@
 {
-  "ultimo_id": 2,
+  "ultimo_id": 3,
   "fecha_ultima_publicacion": "2026-05-10",
   "publicaciones": [
     {
@@ -11,6 +11,11 @@
       "id": 2,
       "fecha": "2026-05-10",
       "tema": "Soledad fértil"
+    },
+    {
+      "id": 3,
+      "fecha": "2026-05-10",
+      "tema": "Esperanza realista"
     }
   ]
 }
