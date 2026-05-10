@@ -70,11 +70,8 @@ tema: {tema['nombre']}
 
 {texto_final}
 
+---
 """
-if url_ilustracion:
-    contenido_md += f"![Ilustración]({url_ilustracion})\n\n"
-
-contenido_md += "---"
 
 os.makedirs(os.path.dirname(ruta_publicacion), exist_ok=True)
 with open(ruta_publicacion, 'w', encoding='utf-8') as f:
