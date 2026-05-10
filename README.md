@@ -216,7 +216,7 @@ docs/_posts/
 El proyecto incluye un workflow de GitHub Actions en:
 
 ```text
-.github/workflows/daily-fabula.yml
+.github/workflows/daily-escrito.yml
 ```
 
 Ese workflow se encarga de:
