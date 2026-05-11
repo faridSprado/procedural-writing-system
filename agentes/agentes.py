@@ -1,6 +1,7 @@
 import json
 import random
 import re
+import unicodedata
 from typing import Any
 from urllib.parse import quote
 
@@ -23,6 +24,50 @@ def cargar_guia() -> dict[str, Any]:
 
 
 GUIA = cargar_guia()
+
+# Palabras o marcas típicas que no deberían aparecer en el texto final.
+# No pretende ser un detector lingüístico perfecto; funciona como filtro preventivo
+# y como disparador para una corrección adicional cuando aparece algo raro.
+ENGLISH_WORDS = {
+    "outside",
+    "inside",
+    "window",
+    "street",
+    "silence",
+    "memory",
+    "memories",
+    "coffee",
+    "comfort",
+    "goodbye",
+    "grief",
+    "farewell",
+    "hands",
+    "hand",
+    "light",
+    "shadow",
+    "room",
+    "dust",
+    "sunlight",
+    "lonely",
+    "empty",
+    "call",
+    "heart",
+    "soul",
+}
+
+ENGLISH_MARKERS = [
+    "outside",
+    "inside",
+    "window",
+    "street",
+    "silence",
+    "memory",
+    "coffee",
+    "comfort",
+    "goodbye",
+    "farewell",
+    "sunlight",
+]
 
 
 def limpiar_respuesta(texto: str) -> str:
@@ -47,6 +92,130 @@ def extraer_json(texto: str) -> dict[str, Any]:
         raise
 
 
+def normalizar_token(token: str) -> str:
+    token = unicodedata.normalize("NFKD", token)
+    token = "".join(ch for ch in token if not unicodedata.combining(ch))
+    return token.lower()
+
+
+
+def detectar_tokens_sospechosos(texto: str) -> list[str]:
+    tokens = re.findall(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+", texto)
+    sospechosos: list[str] = []
+
+    for token in tokens:
+        token_sin_tildes = normalizar_token(token)
+
+        # Caso tipo calleOutside, almaInside, etc.
+        if re.search(r"[a-záéíóúüñ]+[A-Z][a-zA-ZÁÉÍÓÚÜÑáéíóúüñ]*", token):
+            sospechosos.append(token)
+            continue
+
+        if token_sin_tildes in ENGLISH_WORDS:
+            sospechosos.append(token)
+            continue
+
+        for marker in ENGLISH_MARKERS:
+            if marker in token_sin_tildes and token_sin_tildes != marker:
+                sospechosos.append(token)
+                break
+
+    # Evita duplicados y conserva el orden.
+    vistos = set()
+    salida = []
+    for token in sospechosos:
+        if token not in vistos:
+            vistos.add(token)
+            salida.append(token)
+    return salida
+
+
+
+def corregir_idioma(texto: str, tema: dict[str, str]) -> str:
+    """
+    Hace una pasada de seguridad para que el texto quede completamente en español.
+    Si aparece una palabra en inglés, spanglish o un token extraño, la corrige sin
+    cambiar el tono del texto.
+    """
+
+    prompt = f"""
+Eres un corrector editorial de estilo literario.
+
+Tu única tarea es revisar el siguiente texto y dejarlo completamente en español neutro.
+No lo resumas ni lo reescribas por completo.
+Corrige solo lo necesario para que quede limpio y natural.
+
+Reglas:
+- El resultado debe estar total y completamente en español.
+- No puede quedar ninguna palabra en inglés.
+- No puede quedar spanglish.
+- No puede quedar camelCase ni tokens raros incrustados dentro de palabras.
+- Conserva el tono íntimo, la voz y la estructura original.
+- No agregues título.
+- No agregues comillas.
+- Devuelve solo el texto final corregido.
+
+Tema: {tema['nombre']}
+
+Texto:
+{texto}
+"""
+
+    response = client.chat.completions.create(
+        model=GROQ_MODEL,
+        messages=[
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.0,
+        max_tokens=420,
+    )
+
+    corregido = limpiar_respuesta(response.choices[0].message.content or "")
+    return corregido or texto
+
+
+
+def asegurar_texto_en_espanol(texto: str, tema: dict[str, str]) -> str:
+    """
+    Aplica una corrección editorial y valida que no queden tokens sospechosos.
+    Si todavía encuentra restos extraños, hace un segundo intento más estricto.
+    """
+
+    texto_corregido = corregir_idioma(texto, tema)
+    sospechosos = detectar_tokens_sospechosos(texto_corregido)
+
+    if not sospechosos:
+        return texto_corregido
+
+    prompt = f"""
+Corrige este texto para que quede completamente en español y elimina cualquier resto de palabras en inglés o mezclas raras.
+
+Palabras o fragmentos problemáticos detectados: {', '.join(sospechosos)}
+
+Reglas obligatorias:
+- Devuelve solo el texto corregido.
+- Todo debe quedar en español.
+- Mantén el mismo sentido y tono.
+- No añadas explicaciones.
+
+Texto:
+{texto_corregido}
+"""
+
+    response = client.chat.completions.create(
+        model=GROQ_MODEL,
+        messages=[
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.0,
+        max_tokens=420,
+    )
+
+    segunda_version = limpiar_respuesta(response.choices[0].message.content or "")
+    return segunda_version or texto_corregido
+
+
+
 def seleccionar_tema(temas_recientes: list[str] | None = None) -> dict[str, str]:
     temas_recientes = temas_recientes or []
     temas_disponibles = GUIA["temas"]
@@ -68,6 +237,12 @@ Eres El Poeta, la voz editorial de {PROJECT_NAME}.
 
 Tu trabajo es escribir un texto poético breve, íntimo y publicable. No escribes frases motivacionales genéricas: escribes escenas pequeñas que alguien podría sentir como propias.
 
+## Requisito absoluto de idioma
+- Escribe exclusivamente en español.
+- No uses palabras en inglés.
+- No mezcles idiomas.
+- No inventes tokens raros ni camelCase dentro de una palabra.
+
 ## Guía de estilo
 - Género: {GUIA['tono_estilo']['genero']}
 - Atmósfera: {GUIA['tono_estilo']['atmosfera']}
@@ -85,7 +260,6 @@ Descripción: {tema_elegido['descripcion']}
 
 ## Reglas de salida
 - Devuelve solo el texto final.
-- Escribe entre 45 y 95 palabras.
 - No incluyas título.
 - No incluyas firma.
 - No expliques el proceso.
@@ -102,10 +276,12 @@ Descripción: {tema_elegido['descripcion']}
             },
         ],
         temperature=0.9,
-        max_tokens=260,
+        max_tokens=360,
     )
 
     texto = limpiar_respuesta(response.choices[0].message.content or "")
+    texto = asegurar_texto_en_espanol(texto, tema_elegido)
+
     print(f"✅ Texto generado: {texto[:70]}...")
     return texto, tema_elegido
 
@@ -115,6 +291,20 @@ def agente_guardian(
     texto: str, tema: dict[str, str]
 ) -> tuple[str | list[str], bool, dict[str, Any]]:
     print("🛡️ El Guardián de la Emoción revisa...")
+
+    sospechosos = detectar_tokens_sospechosos(texto)
+    if sospechosos:
+        violaciones = [
+            "El texto contiene palabras o fragmentos que no parecen estar completamente en español: "
+            + ", ".join(sospechosos)
+        ]
+        print(f"❌ Rechazado: {violaciones}")
+        return violaciones, False, {
+            "es_valido": False,
+            "violaciones": violaciones,
+            "puntuacion_emocional": 0,
+            "comentario_editorial": "Se detectaron restos de inglés o mezcla de idiomas.",
+        }
 
     check_prompt = f"""
 Actúa como editor literario. Evalúa si este texto puede publicarse en {PROJECT_NAME}.
@@ -127,7 +317,8 @@ Tema: {tema['nombre']} - {tema['descripcion']}
 3. Suena humano, vulnerable y natural.
 4. Respeta la restricción: {GUIA['restriccion_adicional']}
 5. No parece texto corporativo ni autoayuda genérica.
-6. Tiene entre 45 y 95 palabras, salvo que una frase final necesite cerrar con naturalidad.
+6. Mantiene una extensión razonable para una publicación poética breve.
+7. Debe estar total y completamente en español. Si detectas una sola palabra en inglés, spanglish, camelCase o un token extraño, debes rechazarlo.
 
 ## Texto
 {texto}
@@ -182,7 +373,7 @@ Create an English image prompt for a square editorial artwork that accompanies t
 Theme: {tema['nombre']}
 Text: {texto[:500]}
 
-Visual style: quiet editorial photograph, soft paper texture, subtle grain, warm minimalism, muted earth tones, natural window light, no readable text, no logos, no detailed faces.
+Visual style: emotional editorial poster, soft paper texture, subtle grain, warm minimalism, muted tones, cinematic natural light, no readable text, no logos, no detailed faces.
 
 Return only the image prompt. Maximum 70 words.
 """
