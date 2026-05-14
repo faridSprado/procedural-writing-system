@@ -1,6 +1,6 @@
 {
-  "ultimo_id": 8,
-  "fecha_ultima_publicacion": "2026-05-13",
+  "ultimo_id": 9,
+  "fecha_ultima_publicacion": "2026-05-14",
   "publicaciones": [
     {
       "id": 1,
@@ -68,6 +68,16 @@
       "imagen": "/assets/social/escrito-0008.png",
       "background_image": "https://image.pollinations.ai/prompt/A%20worn%2C%20blank%20paper%20on%20a%20wooden%20desk%2C%20softly%20lit%20by%20warm%2C%20natural%20light%2C%20with%20a%20faint%2C%20crumpled%20paper%20shadow%2C%20evoking%20a%20sense%20of%20longing%20and%20unspoken%20words.?width=1080&height=1080&nologo=true&enhance=true",
       "prompt_visual": "A worn, blank paper on a wooden desk, softly lit by warm, natural light, with a faint, crumpled paper shadow, evoking a sense of longing and unspoken words.",
+      "puntuacion_emocional": 9
+    },
+    {
+      "id": 9,
+      "fecha": "2026-05-14T05:12:00.354406-05:00",
+      "tema": "Cicatrices",
+      "archivo": "docs/_posts/2026-05-14-escrito-0009.md",
+      "imagen": "/assets/social/escrito-0009.png",
+      "background_image": "https://image.pollinations.ai/prompt/A%20warm%2C%20muted%20still%20life%20of%20a%20cracked%2C%20empty%20coffee%20cup%20on%20a%20worn%20table%2C%20illuminated%20by%20soft%2C%20natural%20morning%20light%2C%20with%20subtle%20shadows%20and%20texture%2C%20evoking%20a%20sense%20of%20melancholy%20and%20nostalgia.?width=1080&height=1080&nologo=true&enhance=true",
+      "prompt_visual": "A warm, muted still life of a cracked, empty coffee cup on a worn table, illuminated by soft, natural morning light, with subtle shadows and texture, evoking a sense of melancholy and nostalgia.",
       "puntuacion_emocional": 9
     }
   ]
