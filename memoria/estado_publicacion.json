@@ -1,6 +1,6 @@
 {
-  "ultimo_id": 10,
-  "fecha_ultima_publicacion": "2026-05-15",
+  "ultimo_id": 11,
+  "fecha_ultima_publicacion": "2026-05-16",
   "publicaciones": [
     {
       "id": 1,
@@ -88,6 +88,16 @@
       "imagen": "/assets/social/escrito-0010.png",
       "background_image": "https://image.pollinations.ai/prompt/A%20serene%2C%20empty%20room%20with%20a%20vacant%20chair%2C%20soft%20morning%20light%20pours%20through%20an%20open%20window%2C%20casting%20a%20warm%20glow%20on%20a%20solitary%2C%20empty%20cup%20on%20a%20wooden%20table%2C%20evoking%20a%20sense%20of%20quiet%20contemplation%20and%20self-reflection.?width=1080&height=1080&nologo=true&enhance=true",
       "prompt_visual": "A serene, empty room with a vacant chair, soft morning light pours through an open window, casting a warm glow on a solitary, empty cup on a wooden table, evoking a sense of quiet contemplation and self-reflection.",
+      "puntuacion_emocional": 9
+    },
+    {
+      "id": 11,
+      "fecha": "2026-05-16T04:27:13.936203-05:00",
+      "tema": "Amor consciente",
+      "archivo": "docs/_posts/2026-05-16-escrito-0011.md",
+      "imagen": "/assets/social/escrito-0011.png",
+      "background_image": "https://image.pollinations.ai/prompt/A%20warm%2C%20cinematic%20scene%20of%20entwined%20hands%20around%20a%20shared%20coffee%20cup%2C%20softly%20lit%20by%20morning%20light%20filtering%20through%20a%20window%2C%20on%20a%20subtle%2C%20grainy%20paper%20texture.?width=1080&height=1080&nologo=true&enhance=true",
+      "prompt_visual": "A warm, cinematic scene of entwined hands around a shared coffee cup, softly lit by morning light filtering through a window, on a subtle, grainy paper texture.",
       "puntuacion_emocional": 9
     }
   ]
