@@ -1,6 +1,6 @@
 {
-  "ultimo_id": 11,
-  "fecha_ultima_publicacion": "2026-05-16",
+  "ultimo_id": 12,
+  "fecha_ultima_publicacion": "2026-05-17",
   "publicaciones": [
     {
       "id": 1,
@@ -98,6 +98,16 @@
       "imagen": "/assets/social/escrito-0011.png",
       "background_image": "https://image.pollinations.ai/prompt/A%20warm%2C%20cinematic%20scene%20of%20entwined%20hands%20around%20a%20shared%20coffee%20cup%2C%20softly%20lit%20by%20morning%20light%20filtering%20through%20a%20window%2C%20on%20a%20subtle%2C%20grainy%20paper%20texture.?width=1080&height=1080&nologo=true&enhance=true",
       "prompt_visual": "A warm, cinematic scene of entwined hands around a shared coffee cup, softly lit by morning light filtering through a window, on a subtle, grainy paper texture.",
+      "puntuacion_emocional": 9
+    },
+    {
+      "id": 12,
+      "fecha": "2026-05-17T04:43:47.458322-05:00",
+      "tema": "Vínculos humanos",
+      "archivo": "docs/_posts/2026-05-17-escrito-0012.md",
+      "imagen": "/assets/social/escrito-0012.png",
+      "background_image": "https://image.pollinations.ai/prompt/A%20serene%2C%20empty%20room%20with%20a%20vacant%20chair%2C%20an%20empty%20cup%20on%20a%20table%2C%20and%20an%20open%20window%20letting%20in%20warm%2C%20natural%20light%2C%20evoking%20a%20sense%20of%20longing%20and%20shared%20silence.?width=1080&height=1080&nologo=true&enhance=true",
+      "prompt_visual": "A serene, empty room with a vacant chair, an empty cup on a table, and an open window letting in warm, natural light, evoking a sense of longing and shared silence.",
       "puntuacion_emocional": 9
     }
   ]
