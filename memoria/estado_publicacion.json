@@ -1,6 +1,6 @@
 {
-  "ultimo_id": 12,
-  "fecha_ultima_publicacion": "2026-05-17",
+  "ultimo_id": 13,
+  "fecha_ultima_publicacion": "2026-05-18",
   "publicaciones": [
     {
       "id": 1,
@@ -108,6 +108,16 @@
       "imagen": "/assets/social/escrito-0012.png",
       "background_image": "https://image.pollinations.ai/prompt/A%20serene%2C%20empty%20room%20with%20a%20vacant%20chair%2C%20an%20empty%20cup%20on%20a%20table%2C%20and%20an%20open%20window%20letting%20in%20warm%2C%20natural%20light%2C%20evoking%20a%20sense%20of%20longing%20and%20shared%20silence.?width=1080&height=1080&nologo=true&enhance=true",
       "prompt_visual": "A serene, empty room with a vacant chair, an empty cup on a table, and an open window letting in warm, natural light, evoking a sense of longing and shared silence.",
+      "puntuacion_emocional": 9
+    },
+    {
+      "id": 13,
+      "fecha": "2026-05-18T06:41:26.791749-05:00",
+      "tema": "Esperanza realista",
+      "archivo": "docs/_posts/2026-05-18-escrito-0013.md",
+      "imagen": "/assets/social/escrito-0013.png",
+      "background_image": "https://image.pollinations.ai/prompt/A%20serene%2C%20empty%20room%20at%20dawn%2C%20with%20a%20single%2C%20faintly%20lit%20candle%20on%20a%20table%2C%20and%20soft%20morning%20light%20peeking%20through%20a%20window%2C%20casting%20a%20warm%20glow%20on%20a%20vacant%20chair.?width=1080&height=1080&nologo=true&enhance=true",
+      "prompt_visual": "A serene, empty room at dawn, with a single, faintly lit candle on a table, and soft morning light peeking through a window, casting a warm glow on a vacant chair.",
       "puntuacion_emocional": 9
     }
   ]
